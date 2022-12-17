@@ -27,6 +27,7 @@
                     // Place the player's symbol on the board and switch to the other player
                     newBoard[index] = currentPlayer;
                     setBoard(newBoard);
+
                     setCurrentPlayer(currentPlayer === 'X' ? 'O' : 'X');
                 }
 
@@ -68,18 +69,22 @@
                 // Render the game board
                 return (
                     <div>
-                        <div className="board">
-                            {board.map((square, index) => (
-                            <div key={index} className="square" onClick={() => handleClick(index)}>
-                                {square}
+                        <div style={{ width: '100%', display: 'block' }}>
+                            <div className="board" style={{ margin: 'auto', width: '80%' }}>
+                                {board.map((square, index) => (
+                                <div style={{ boxSizing: 'border-box', border: 'black 5px solid', width: '33%', height: '100px', float: 'left', fontSize: '20px', textAlign: 'center' }} key={index} className="square" onClick={() => handleClick(index)}>
+                                    {square}
+                                </div>
+                                ))}
                             </div>
-                            ))}
                         </div>
-                        <div className="status">
-                            {checkForWin() ? `Player ${currentPlayer} has won!` : null}
-                            {checkForDraw() ? 'The game is a draw!' : null}
+                        <div style={{ width: '100%', display: 'block' }}>
+                            <div className="status">
+                                {checkForWin() ? `Player ${currentPlayer === 'X' ? 'O' : 'X'} has won!` : null}
+                                {checkForDraw() ? 'The game is a draw!' : null}
+                            </div>
+                            <button onClick={handleNewGame}>New Game</button>
                         </div>
-                        <button onClick={handleNewGame}>New Game</button>
                     </div>
                 );
             }
