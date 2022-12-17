@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+        <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+
+        <!-- Don't use this in production: -->
+        <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    </head>
+    <body>
+        <script type="text/babel">
+            const TicTacToe = () => {
+                // Initialize the game board with an empty array
+                const [board, setBoard] = React.useState(new Array(9).fill(null));
+
+                // Initialize a variable to store the current player (either 'X' or 'O')
+                const [currentPlayer, setCurrentPlayer] = React.useState('X');
+
+                // This function is called when a player clicks on a square
+                const handleClick = (index) => {
+                    // Make a copy of the board array so we can update it without mutating the original
+                    const newBoard = [...board];
+                    // If the square is already filled, do nothing
+                    if (newBoard[index]) {
+                    return;
+                    }
+                    // Place the player's symbol on the board and switch to the other player
+                    newBoard[index] = currentPlayer;
+                    setBoard(newBoard);
+                    setCurrentPlayer(currentPlayer === 'X' ? 'O' : 'X');
+                }
+
+                // This function checks if the current player has won the game
+                const checkForWin = () => {
+                    // All possible winning combinations
+                    const winCombinations = [
+                    [0, 1, 2],
+                    [3, 4, 5],
+                    [6, 7, 8],
+                    [0, 3, 6],
+                    [1, 4, 7],
+                    [2, 5, 8],
+                    [0, 4, 8],
+                    [2, 4, 6]
+                    ];
+
+                    // Check if any of the win combinations have been filled with the same player's symbol
+                    for (const combination of winCombinations) {
+                    const [a, b, c] = combination;
+                    if (board[a] && board[a] === board[b] && board[a] === board[c]) {
+                        return true;
+                    }
+                    }
+                    return false;
+                }
+
+                // This function checks if the game is a draw (i.e. no empty squares left and no player has won)
+                const checkForDraw = () => {
+                    return !board.includes(null) && !checkForWin();
+                }
+
+                // This function is called when a player clicks the "New Game" button
+                const handleNewGame = () => {
+                    setBoard(new Array(9).fill(null));
+                    setCurrentPlayer('X');
+                }
+
+                // Render the game board
+                return (
+                    <div>
+                        <div className="board">
+                            {board.map((square, index) => (
+                            <div key={index} className="square" onClick={() => handleClick(index)}>
+                                {square}
+                            </div>
+                            ))}
+                        </div>
+                        <div className="status">
+                            {checkForWin() ? `Player ${currentPlayer} has won!` : null}
+                            {checkForDraw() ? 'The game is a draw!' : null}
+                        </div>
+                        <button onClick={handleNewGame}>New Game</button>
+                    </div>
+                );
+            }
+
+            const container = document.getElementById('app');
+            const root = ReactDOM.createRoot(container);
+            root.render(<TicTacToe />)
+        </script>
+        <div id="app"></div>
+    </body>
+</html>
